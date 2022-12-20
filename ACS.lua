@@ -1,7 +1,7 @@
 local monitors = {peripheral.find("monitor")}
 
 function DefineMonitors()
-    for i in monitors do
+    for i in pairs(monitors) do
         i.setBackgroundColor(colors.gray)
         i.clear()
         i.setCursorPos(1, 1)
