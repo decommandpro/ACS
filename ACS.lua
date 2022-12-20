@@ -8,3 +8,5 @@ function DefineMonitors()
         i.write("Define as Status Display")
     end
 end
+
+DefineMonitors()
