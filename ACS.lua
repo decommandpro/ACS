@@ -1,10 +1,10 @@
-local monitors = {peripheral.find("monitor")}
-local monitorTypes = {"Status", "LevelTrim", "RotTrim"}
+local unDefMonitors = {peripheral.find("monitor")}
+local monitorTypes = {"Ship Status", "Indicators", "LevelTrim", "RotTrim"}
 local definedMonitors = {}
 
 function DefineMonitors()
     for i, t in pairs(monitorTypes) do
-        for j, m in pairs(monitors) do
+        for j, m in pairs(unDefMonitors) do
             m.setBackgroundColor(colors.gray)
             m.setTextColor(colors.white)
             m.setTextScale(0.5)
@@ -19,16 +19,82 @@ function DefineMonitors()
         definedMonitors[t].setBackgroundColor(colors.black)
         definedMonitors[t].clear()
 
-        for j, m in pairs(monitors) do
+        for j, m in pairs(unDefMonitors) do
             if peripheral.getName(m) == peripheral.getName(definedMonitors[t]) then
-                table.remove(monitors, j)
-                print("remove")
+                table.remove(unDefMonitors, j)
             end
         end
     end
+    for i, m in pairs(unDefMonitors) do
+        m.setBackgroundColor(colors.black)
+        m.clear()
+    end
 end
 
-DefineMonitors()
-for i, m in pairs(definedMonitors) do
-    m.write(i)
+
+
+function UpdateShipStatusDisplay()
+    local m = definedMonitors["Ship Status"]
+    local StressCap = 100000
+    local StressUsage = 80000
+
+    m.setTextColor(colors.lightGray)
+    m.setBackgroundColor(colors.black)
+    m.setCursorPos(1, 3)
+    m.write("Stress: ")
+
+    m.setCursorPos(15, 3)
+    for i=1, 10 do
+        if i <= StressUsage/StressCap*10 then
+            m.setTextColor(colors.lime)
+        else
+            m.setTextColor(colors.red)
+        end
+        m.write(string.char(187))
+    end
+
+    m.setTextColor(colors.gray)
+    m.setCursorPos(26, 3)
+    m.write("("..StressUsage.."/"..StressCap..")")
 end
+
+
+
+function UpdateIndicatorsDisplay()
+    local m = definedMonitors["Indicators"]
+
+end
+
+
+
+function UpdateDisplays()
+    for i, t in pairs(monitorTypes) do
+        local m = definedMonitors[t]
+        m.setBackgroundColor(colors.black)
+        m.clear()
+        m.setTextColor(colors.black)
+        m.setBackgroundColor(colors.lightGray)
+        m.setCursorPos(1, 1)
+        m.clearLine()
+        m.write(t)
+    end
+    UpdateShipStatusDisplay()
+    UpdateIndicatorsDisplay()
+end
+
+
+
+
+
+
+
+DefineMonitors()
+
+while sleep(0.1) or true do
+    UpdateDisplays()
+end
+
+
+--for i, m in pairs(definedMonitors) do
+--    m.write(i)
+--end
