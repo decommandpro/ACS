@@ -35,6 +35,8 @@ end
 
 function UpdateShipStatusDisplay()
     local m = definedMonitors["Ship Status"]
+
+
     local StressCap = 100000
     local StressUsage = 80000
 
@@ -62,7 +64,41 @@ end
 
 function UpdateIndicatorsDisplay()
     local m = definedMonitors["Indicators"]
+    local lights = {
+        LandingGear = true,
+    }
+    local warnings = {
+        OverStressed = true,
+        Stall = true,
+        Falling = true,
+    }
 
+    m.setTextColor(colors.lightGray)
+    m.setBackgroundColor(colors.black)
+    m.setCursorPos(2, 3)
+    for i, v in pairs(lights) do
+        if v then
+            m.blit(" ", "5", "5")
+        else
+            m.blit(" ", "e", "e")
+        end
+        m.write(" "..i)
+
+        local _, y = m.getCursorPos()
+        m.setCursorPos(2, y+1)
+    end
+
+    m.setTextColor(colors.red)
+    m.setBackgroundColor(colors.black)
+    m.setCursorPos(30, 3)
+    for i, v in pairs(warnings) do
+        if v then
+            m.write(i)
+
+            local _, y = m.getCursorPos()
+            m.setCursorPos(30, y+1)
+        end
+    end
 end
 
 
