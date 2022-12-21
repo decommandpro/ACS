@@ -18,8 +18,9 @@ function DefineMonitors()
         definedMonitors[t] = peripheral.wrap(side)
         definedMonitors[t].setBackgroundColor(colors.black)
         definedMonitors[t].clear()
+
         for j, m in pairs(monitors) do
-            if m == definedMonitors[t] then
+            if peripheral.getName(m) == peripheral.getName(definedMonitors[t]) then
                 table.remove(monitors, j)
                 print("remove")
             end
