@@ -19,8 +19,6 @@ function DefineMonitors()
         definedMonitors[t].setBackgroundColor(colors.black)
         definedMonitors[t].clear()
         for j, m in pairs(monitors) do
-            print(m.getSize())
-            print(definedMonitors[t].getSize()[1])
             if m == definedMonitors[t] then
                 table.remove(monitors, j)
                 print("remove")
