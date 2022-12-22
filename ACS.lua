@@ -43,28 +43,57 @@ end
 function UpdateShipStatusDisplay()
     local m = definedMonitors["Ship Status"]
 
-
     local StressCap = 100000
     local StressUsage = 80000
 
-    m.setTextColor(colors.lightGray)
-    m.setBackgroundColor(colors.black)
-    m.setCursorPos(1, 3)
-    m.write("Stress: ")
+    local bars = {
+        Stress = {Value = StressUsage/StressCap*10, Extra = "("..StressUsage.."/"..StressCap..")", Inverted = true},
+        Fuel = {Value = 3, Extra = "(".."30".."/".."100"..")", Inverted = false},
+    }
 
-    m.setCursorPos(15, 3)
-    for i=1, 10 do
+    
+
+    --[[for i=1, 10 do
         if i <= StressUsage/StressCap*10 then
             m.setTextColor(colors.red)
         else
             m.setTextColor(colors.lime)
         end
         m.write(string.char(171))
-    end
+    end]]--
 
-    m.setTextColor(colors.gray)
-    m.setCursorPos(26, 3)
-    m.write("("..StressUsage.."/"..StressCap..")")
+    
+
+    m.setCursorPos(1, 3)
+    for i, b in pairs(bars) do
+        m.setTextColor(colors.lightGray)
+        m.setBackgroundColor(colors.black)
+        local _, y = m.getCursorPos()
+        m.setCursorPos(1, y)
+        m.write(i..": ")
+        m.setCursorPos(15, y)
+        for j=1, 10 do
+            if b.Inverted then
+                if j <= b.Value then
+                    m.setTextColor(colors.red)
+                else
+                    m.setTextColor(colors.lime)
+                end
+            else
+                if j >= b.Value then
+                    m.setTextColor(colors.red)
+                else
+                    m.setTextColor(colors.lime)
+                end
+            end
+            m.write(string.char(187))
+        end
+
+        m.setTextColor(colors.gray)
+        m.setCursorPos(26, y)
+        m.write(b.Extra)
+        m.setCursorPos(1, y+1)
+    end
 end
 
 
