@@ -113,7 +113,7 @@ end
 
 function UpdateLTrimDisplay()
     local m = definedMonitors["LevelTrim"]
-    m.
+    --m.
 end
 
 
