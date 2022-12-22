@@ -3,7 +3,7 @@ local lime = 0x00FF00
 
 
 local unDefMonitors = {peripheral.find("monitor")}
-local monitorTypes = {"Ship Status", "Indicators", "LevelTrim", "RotTrim", "Thrust"}
+local monitorTypes = {"Ship Status", "Indicators", "LevelTrim", "RotTrim", "Thrust", "FlightInfo"}
 local definedMonitors = {}
 
 function DefineMonitors()
@@ -108,6 +108,7 @@ function UpdateIndicatorsDisplay()
         OverStressed = true,
         Stall = true,
         Falling = true,
+        Damage = true,
     }
 
     m.setTextColor(colors.lightGray)
@@ -139,10 +140,62 @@ function UpdateIndicatorsDisplay()
 end
 
 
+function DrawTrimCross(m)
+    m.setCursorPos(2, 6)
+    for i=1, 13 do
+        m.blit("-", "7", "f")
+    end
+    for i=1, 9 do
+        m.setCursorPos(8, i+1)
+        m.blit("|", "7", "f")
+    end
+    m.setCursorPos(8, 6)
+    m.blit(string.char(127), "7", "f")
+end
+
+
+function DrawTrimOutlines(m)
+    m.setCursorPos(1, 2)
+    for i=1, 9 do
+        m.setCursorPos(1, i+1)
+        m.blit(string.char(127), "f", "8")
+
+        m.setCursorPos(15, i+1)
+        m.blit(string.char(127), "f", "7")
+    end
+end
+
+
 
 function UpdateLTrimDisplay()
     local m = definedMonitors["LevelTrim"]
-    --m.
+
+    DrawTrimCross(m)
+    DrawTrimOutlines(m)
+
+
+end
+
+
+
+function UpdateRTrimDisplay()
+    local m = definedMonitors["RotTrim"]
+
+    DrawTrimCross(m)
+    DrawTrimOutlines(m)
+
+    
+end
+
+
+
+function UpdateThrustDisplay()
+    local m = definedMonitors["Thrust"]
+
+    DrawTrimCross(m)
+    DrawTrimOutlines(m)
+
+    
 end
 
 
@@ -160,6 +213,8 @@ function UpdateDisplays()
     UpdateShipStatusDisplay()
     UpdateIndicatorsDisplay()
     UpdateLTrimDisplay()
+    UpdateRTrimDisplay()
+    UpdateThrustDisplay()
 end
 
 
