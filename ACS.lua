@@ -1,10 +1,17 @@
+local red = 0xAA0000
+local lime = 0x00FF00
+
+
 local unDefMonitors = {peripheral.find("monitor")}
-local monitorTypes = {"Ship Status", "Indicators", "LevelTrim", "RotTrim"}
+local monitorTypes = {"Ship Status", "Indicators", "LevelTrim", "RotTrim", "Thrust"}
 local definedMonitors = {}
 
 function DefineMonitors()
     for i, t in pairs(monitorTypes) do
         for j, m in pairs(unDefMonitors) do
+            m.setPaletteColor(colors.red, red)
+            m.setPaletteColor(colors.lime, lime)
+
             m.setBackgroundColor(colors.gray)
             m.setTextColor(colors.white)
             m.setTextScale(0.5)
@@ -48,11 +55,11 @@ function UpdateShipStatusDisplay()
     m.setCursorPos(15, 3)
     for i=1, 10 do
         if i <= StressUsage/StressCap*10 then
-            m.setTextColor(colors.lime)
-        else
             m.setTextColor(colors.red)
+        else
+            m.setTextColor(colors.lime)
         end
-        m.write(string.char(187))
+        m.write(string.char(171))
     end
 
     m.setTextColor(colors.gray)
@@ -66,6 +73,7 @@ function UpdateIndicatorsDisplay()
     local m = definedMonitors["Indicators"]
     local lights = {
         LandingGear = true,
+        Thrusters = false,
     }
     local warnings = {
         OverStressed = true,
@@ -103,19 +111,26 @@ end
 
 
 
+function UpdateLTrimDisplay()
+    local m = definedMonitors["LevelTrim"]
+    m.
+end
+
+
+
 function UpdateDisplays()
-    for i, t in pairs(monitorTypes) do
-        local m = definedMonitors[t]
+    for i, m in pairs(definedMonitors) do
         m.setBackgroundColor(colors.black)
         m.clear()
         m.setTextColor(colors.black)
         m.setBackgroundColor(colors.lightGray)
         m.setCursorPos(1, 1)
         m.clearLine()
-        m.write(t)
+        m.write(i)
     end
     UpdateShipStatusDisplay()
     UpdateIndicatorsDisplay()
+    UpdateLTrimDisplay()
 end
 
 
